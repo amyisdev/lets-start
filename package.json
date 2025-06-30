@@ -1,0 +1,14 @@
+{
+  "name": "lets-start",
+  "private": true,
+  "scripts": {},
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
+    "turbo": "^2.5.4",
+    "typescript": "5.8.2"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
