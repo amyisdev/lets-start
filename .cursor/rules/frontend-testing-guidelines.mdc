@@ -1,0 +1,59 @@
+---
+description: Testing guidelines for React Router 7 components and test utilities in the frontend app
+globs: apps/frontend/**/*.test.ts,apps/frontend/**/*.test.tsx
+alwaysApply: false
+---
+# Frontend Testing Guidelines
+
+## Test Utilities Import
+
+Always import test utilities from the centralized utils:
+
+```tsx
+import { renderWithRouter } from '../utils'
+// or from tests/utils if in a different directory structure
+```
+
+## When to Use renderWithRouter vs render
+
+### Use `renderWithRouter` for:
+- Components that use React Router hooks (`useNavigate`, `useLocation`, `useParams`, etc.)
+- Components that render `<Link>` or `<NavLink>` elements  
+- Full application components (like `<App />`)
+- Components that depend on route parameters
+- Any component that needs router context
+
+### Use regular `render` from `@testing-library/react` for:
+- Simple components that don't interact with routing
+- Unit tests for pure functions
+- Components that don't use router context
+
+## React Router 7 Testing Patterns
+
+### Basic Route Testing
+```tsx
+const screen = renderWithRouter(<App />)
+// Tests component at default route '/'
+```
+
+### Specific Route Testing
+```tsx
+const screen = renderWithRouter(<UserProfile />, {
+  initialEntries: ['/users/123']
+})
+```
+
+### Multi-Route Navigation Testing
+```tsx
+const screen = renderWithRouter(<App />, {
+  initialEntries: ['/', '/about', '/contact'],
+  initialIndex: 1 // Start at /about
+})
+```
+
+## Important Notes
+
+- Always use `MemoryRouter` for testing (handled by `renderWithRouter`)
+- React Router 7 uses `react-router` package, NOT `react-router-dom`
+- For comprehensive documentation, see [testing guide](mdc:apps/frontend/docs/testing.md)
+- Test utilities are located in [tests/utils](mdc:apps/frontend/tests/utils/index.ts)
