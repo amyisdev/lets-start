@@ -78,7 +78,14 @@ apps/frontend/
 
 ## Environment Variables
 
-Create a `.env.local` by copying `.env.example`.
+Create a `.env.local` file in this directory with the following variables:
+
+```env
+# API Configuration
+VITE_API_URL=http://localhost:3000
+```
+
+Copy from `.env.example` if available, or create the file with the above template.
 
 ## Adding shadcn/ui Components
 
@@ -127,9 +134,10 @@ bun run build
 
 ## Learn More
 
-- [Vite Documentation](https://vitejs.dev/guide/)
 - [React Documentation](https://react.dev)
-- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Vite Documentation](https://vitejs.dev)
+- [Tailwind CSS](https://tailwindcss.com)
 - [shadcn/ui](https://ui.shadcn.com)
+- [TypeScript](https://www.typescriptlang.org)
 - [Biome](https://biomejs.dev)
-- [Bun Testing](https://bun.sh/docs/cli/test)
+- [Bun Documentation](https://bun.sh/docs)

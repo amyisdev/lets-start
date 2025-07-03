@@ -1,5 +1,11 @@
 {
   "name": "lets-start",
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
+    "turbo": "^2.5.4",
+    "typescript": "5.8.2"
+  },
+  "packageManager": "bun@1.2.18",
   "private": true,
   "scripts": {
     "dev": "turbo dev",
@@ -9,14 +15,8 @@
     "check:write": "biome check --write",
     "ci": "biome ci && bun run test"
   },
-  "devDependencies": {
-    "@biomejs/biome": "^2.0.6",
-    "turbo": "^2.5.4",
-    "typescript": "5.8.2"
-  },
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "packageManager": "bun@1.2.18"
+  ]
 }

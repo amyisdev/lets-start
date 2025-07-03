@@ -9,7 +9,7 @@ A modern, full-stack personal starter kit built with Turborepo for rapid project
 ## Tech Stack
 
 ### Frontend
-- **React 18** with **TypeScript**
+- **React 19** with **TypeScript**
 - **Vite** for blazing-fast development and building
 - **Tailwind CSS** for utility-first styling
 - **shadcn/ui** for beautiful, accessible UI components
@@ -17,6 +17,9 @@ A modern, full-stack personal starter kit built with Turborepo for rapid project
 ### Backend
 - **Hono** - Fast, lightweight web framework
 - **Drizzle ORM** for type-safe database operations
+- **better-auth** for authentication and user management
+- **pg** - PostgreSQL client library for database connections
+- **PGlite** - Lightweight in-memory PostgreSQL for testing
 
 ### Testing
 - **Bun Test Runner** for fast, modern testing
@@ -38,8 +41,8 @@ lets-start/
 
 ## Apps
 
-- `frontend`: A React application built with Vite, featuring Tailwind CSS and shadcn/ui components
-- `backend`: A Hono-based API server with Drizzle ORM for database operations
+- `frontend`: A React 19 application built with Vite, featuring Tailwind CSS and shadcn/ui components
+- `backend`: A Hono-based API server with Drizzle ORM, better-auth authentication, and PostgreSQL database
 
 ## Getting Started
 
@@ -164,6 +167,9 @@ bun run build
 - [shadcn/ui](https://ui.shadcn.com)
 - [Hono Documentation](https://hono.dev)
 - [Drizzle ORM](https://orm.drizzle.team)
+- [better-auth](https://www.better-auth.com)
+- [pg (node-postgres)](https://node-postgres.com)
+- [PGlite](https://pglite.dev)
 - [Biome](https://biomejs.dev)
 - [Bun Documentation](https://bun.sh/docs)
 
