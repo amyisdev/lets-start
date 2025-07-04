@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { admin } from 'better-auth/plugins'
+import { admin, organization } from 'better-auth/plugins'
+import { eq } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { db } from '@/db/client'
 import { trustedOrigins } from '@/shared/config'
@@ -13,7 +14,15 @@ export const auth = betterAuth({
     usePlural: true,
   }),
 
-  plugins: [admin()],
+  plugins: [
+    admin(),
+    organization({
+      async allowUserToCreateOrganization(user) {
+        const [dbUser] = await db.select().from(schema.users).where(eq(schema.users.id, user.id))
+        return dbUser?.role === 'admin'
+      },
+    }),
+  ],
   emailAndPassword: {
     enabled: true,
   },
