@@ -17,10 +17,6 @@ The frontend application for the "Let's Start" project, built with modern web te
 Run the frontend development server:
 
 ```bash
-# From the root of the monorepo
-bun run dev --filter=frontend
-
-# Or from this directory
 bun run dev
 ```
 
@@ -31,10 +27,6 @@ The application will be available at `http://localhost:5173`
 Build the frontend for production:
 
 ```bash
-# From the root of the monorepo
-bun run build --filter=frontend
-
-# Or from this directory
 bun run build
 ```
 
@@ -43,10 +35,6 @@ bun run build
 Run tests:
 
 ```bash
-# From the root of the monorepo
-bun run test --filter=frontend
-
-# Or from this directory
 bun test
 ```
 

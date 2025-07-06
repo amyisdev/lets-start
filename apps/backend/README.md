@@ -16,13 +16,15 @@ The backend API for the "Let's Start" project, built with modern server technolo
 
 ### Development
 
+Before running the development server, you'll need to set up the database by running the initial migrations to create the required tables.
+
+```bash
+bunx --bun drizzle-kit migrate
+```
+
 Run the backend development server:
 
 ```bash
-# From the root of the monorepo
-bun run dev --filter=backend
-
-# Or from this directory
 bun run dev
 ```
 
@@ -33,10 +35,6 @@ The API will be available at `http://localhost:3000`
 Build the backend for production:
 
 ```bash
-# From the root of the monorepo
-bun run build --filter=backend
-
-# Or from this directory
 bun run build
 ```
 
@@ -45,10 +43,6 @@ bun run build
 Run tests:
 
 ```bash
-# From the root of the monorepo
-bun run test --filter=backend
-
-# Or from this directory
 bun test
 ```
 
