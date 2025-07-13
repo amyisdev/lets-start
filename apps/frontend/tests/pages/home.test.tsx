@@ -1,21 +1,35 @@
-import { describe, expect, it } from 'bun:test'
-import { render } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
+import { unauthenticated } from 'tests/msw/handlers/auth'
+import { server } from 'tests/msw/server'
+import { renderWithRouter } from 'tests/utils'
+import { describe, expect, it } from 'vitest'
 import App from '@/App'
+import { authClient } from '@/lib/auth-client'
 import Home from '@/pages/home'
-import { renderWithRouter } from '../utils'
 
 describe('Home', () => {
-  it('renders heading', () => {
+  it('renders welcome message', () => {
     const screen = render(<Home />)
 
-    const heading = screen.getByRole('heading', { level: 1 })
+    const welcome = screen.getByText('Welcome to the home page')
+    expect(welcome).toBeInTheDocument()
+  })
+
+  it('renders home as index route', async () => {
+    const screen = renderWithRouter(<App />)
+
+    const heading = await screen.findByRole('heading', { level: 1 })
     expect(heading).toHaveTextContent('Home')
   })
 
-  it('renders home as index route', () => {
+  it('redirects to login page if not authenticated', async () => {
+    server.use(unauthenticated)
+    await authClient.signOut()
+
     const screen = renderWithRouter(<App />)
 
-    const heading = screen.getByRole('heading', { level: 1 })
-    expect(heading).toHaveTextContent('Home')
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Login')
+    })
   })
 })

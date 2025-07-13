@@ -81,7 +81,7 @@ Use regular `render` for:
 ### Example Test Structure
 
 ```tsx
-import { describe, expect, it } from 'bun:test'
+import { describe, expect, it } from 'vitest'
 import { renderWithRouter } from '../utils'
 import { SomeComponent } from '@/components/SomeComponent'
 

@@ -15,8 +15,16 @@
     "check:write": "biome check --write",
     "ci": "biome ci && bun run test"
   },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "catalogs": {
+      "testing": {
+        "vitest": "^3.2.4",
+        "@vitest/coverage-v8": "^3.2.4"
+      }
+    }
+  }
 }

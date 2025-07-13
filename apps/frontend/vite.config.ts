@@ -11,18 +11,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      tests: path.resolve(__dirname, './tests'),
     },
   },
   test: {
-    browser: {
-      enabled: true,
-      instances: [{ browser: 'chromium' }],
-      provider: process.env.CI ? 'playwright' : 'preview',
-      headless: !!process.env.CI,
-    },
+    environment: 'happy-dom',
+    setupFiles: ['./tests/setup.ts'],
     coverage: {
-      provider: 'istanbul',
+      provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      exclude: ['dist/', 'node_modules/', 'src/main.tsx', 'src/components/ui/', 'tests/', '**/*.d.ts', '**/*.config.*'],
     },
   },
 })

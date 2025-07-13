@@ -8,7 +8,7 @@ The frontend application for the "Let's Start" project, built with modern web te
 - **Vite** for lightning-fast development and optimized builds
 - **Tailwind CSS** for utility-first styling
 - **shadcn/ui** for beautiful, accessible UI components
-- **Bun Test Runner** for fast testing
+- **Vitest** for fast testing
 
 ## Getting Started
 
@@ -35,7 +35,7 @@ bun run build
 Run tests:
 
 ```bash
-bun test
+bun run test
 ```
 
 ## Project Structure
