@@ -10,6 +10,7 @@ A living starter kit for full-stack projects with Bun, Hono, React, and shadcn/u
 | Server | Bun + Hono + Drizzle ORM + SQLite |
 | Client | Vite + React 19 + Tailwind CSS v4 |
 | UI | shadcn/ui (base-ui, mira style) |
+| Auth | better-auth (email/password) |
 | Tooling | Biome + TypeScript |
 
 ## Quick Start
@@ -21,6 +22,9 @@ bun install
 # Copy environment variables
 cp .env.example .env
 
+# Generate a secret for better-auth
+echo "BETTER_AUTH_SECRET=$(openssl rand -base64 32)" >> .env
+
 # Run database migrations and seed
 bun run --cwd apps/server db:migrate
 bun run --cwd apps/server db:seed
@@ -31,12 +35,18 @@ bun run dev
 
 The web app runs on `http://localhost:5173` and the API server on `http://localhost:3001`.
 
+## Authentication
+
+Authentication is powered by [better-auth](https://www.better-auth.com) with email/password. The web app provides sign-up, sign-in, and sign-out flows. Protected routes and user sessions are handled automatically.
+
+To customize the client origin or API URL, see the environment variables in `.env.example`.
+
 ## Project Structure
 
 ```
 ├── apps/
-│   ├── server/     # Hono REST API with Drizzle + SQLite
-│   └── web/        # Vite React app
+│   ├── server/     # Hono REST API with Drizzle + SQLite + better-auth
+│   └── web/        # Vite React app with auth forms
 ├── packages/
 │   ├── shared/     # Zod schemas and shared types
 │   └── ui/         # shadcn/ui component library
