@@ -12,8 +12,10 @@
     "db:seed": "bun src/db/seed.ts"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.6.9",
     "@hono/zod-validator": "^0.7.6",
     "@workspace/shared": "workspace:*",
+    "better-auth": "^1.6.9",
     "drizzle-orm": "^0.45.2",
     "hono": "^4.12.15",
     "zod": "^3.25.76"

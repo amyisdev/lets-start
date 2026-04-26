@@ -4,10 +4,11 @@ import type {
   UpdateTodoInput,
 } from "@workspace/shared/schemas/todo"
 
-const API_BASE = "/api"
+const API_BASE = `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api`
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${url}`, {
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },

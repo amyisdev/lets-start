@@ -12,6 +12,7 @@
   "dependencies": {
     "@workspace/shared": "workspace:*",
     "@workspace/ui": "workspace:*",
+    "better-auth": "^1.6.9",
     "lucide-react": "^1.11.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
