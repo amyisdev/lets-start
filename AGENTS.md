@@ -6,7 +6,7 @@ Turborepo monorepo with Bun workspaces.
 
 ```
 apps/server    Bun + Hono REST API + Drizzle ORM + SQLite (DB colocated here)
-apps/web       Vite + React 19 + Tailwind v4 + shadcn/ui (base-ui, mira)
+apps/web       Vite + React 19 + Tailwind v4 + shadcn/ui + react-query + sonner
 packages/shared  Zod schemas + inferred types
 packages/ui      shadcn component library
 ```
@@ -61,7 +61,10 @@ import { db } from "@/db/client"
 3. Create route at `apps/server/src/routes/<feature>.ts`, mount in `src/index.ts`
 4. If the route requires authentication, use `app.use("*", needAuth)` inside the route file
 5. Add API client methods to `apps/web/src/api/client.ts`
-6. Build UI in `apps/web/src/components/`
+   - Methods accept an optional `signal: AbortSignal` parameter for request cancellation
+6. Add React Query hooks in `apps/web/src/components/` using `useQuery` / `useMutation`
+   - Errors are surfaced via `toast.error()` from `sonner` in mutation `onError` callbacks
+7. Build UI in `apps/web/src/components/`
 
 ## Adding a shadcn Component
 
@@ -105,6 +108,26 @@ apps/server/
 │   │   └── error.ts    ← global error handler
 │   └── routes/         ← Hono route handlers
 ```
+
+## Web Architecture
+
+```
+apps/web/
+├── src/
+│   ├── api/
+│   │   └── client.ts       ← typed fetch wrapper (accepts AbortSignal)
+│   ├── components/         ← React components + react-query hooks
+│   ├── lib/
+│   │   ├── auth-client.ts  ← better-auth client instance
+│   │   └── auth-provider.tsx ← auth context + useAuth hook
+│   ├── App.tsx             ← root component (auth state machine)
+│   └── main.tsx            ← QueryClientProvider + ThemeProvider + Toaster
+├── index.html              ← HTML entry point
+├── vite.config.ts          ← Vite config (proxies /api/* to server)
+└── tsconfig.app.json       ← TypeScript config (allowImportingTsExtensions)
+```
+
+Data fetching uses `@tanstack/react-query`. API client methods in `client.ts` are plain async functions used as `queryFn` / `mutationFn`. React Query's `signal` is passed through to `fetch` for request cancellation. Errors are surfaced via `toast.error()` from `sonner` in mutation `onError` callbacks.
 
 ## Auth Middleware
 

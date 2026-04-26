@@ -101,6 +101,11 @@ export function ThemeProvider({
     [storageKey],
   )
 
+  const setThemeRef = React.useRef(setTheme)
+  React.useEffect(() => {
+    setThemeRef.current = setTheme
+  }, [setTheme])
+
   const applyTheme = React.useCallback(
     (nextTheme: Theme) => {
       const root = document.documentElement
@@ -167,7 +172,7 @@ export function ThemeProvider({
                 ? "light"
                 : "dark"
 
-        localStorage.setItem(storageKey, nextTheme)
+        setThemeRef.current(nextTheme)
         return nextTheme
       })
     }
@@ -177,7 +182,7 @@ export function ThemeProvider({
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [storageKey])
+  }, [])
 
   React.useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {

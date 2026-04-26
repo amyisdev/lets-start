@@ -26,20 +26,23 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 
 export const api = {
   todos: {
-    list: () => fetchJson<Todo[]>("/todos"),
-    create: (input: CreateTodoInput) =>
+    list: (signal?: AbortSignal) => fetchJson<Todo[]>("/todos", { signal }),
+    create: (input: CreateTodoInput, signal?: AbortSignal) =>
       fetchJson<Todo>("/todos", {
         method: "POST",
         body: JSON.stringify(input),
+        signal,
       }),
-    update: (id: number, input: UpdateTodoInput) =>
+    update: (id: number, input: UpdateTodoInput, signal?: AbortSignal) =>
       fetchJson<Todo>(`/todos/${id}`, {
         method: "PATCH",
         body: JSON.stringify(input),
+        signal,
       }),
-    delete: (id: number) =>
+    delete: (id: number, signal?: AbortSignal) =>
       fetchJson<null>(`/todos/${id}`, {
         method: "DELETE",
+        signal,
       }),
   },
 }

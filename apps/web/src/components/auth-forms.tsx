@@ -23,7 +23,7 @@ export function AuthForms() {
           name,
         })
         if (signUpError) {
-          setError(signUpError.message)
+          setError(signUpError.message ?? "Something went wrong.")
         }
       } else {
         const { error: signInError } = await authClient.signIn.email({
@@ -31,7 +31,7 @@ export function AuthForms() {
           password,
         })
         if (signInError) {
-          setError(signInError.message)
+          setError(signInError.message ?? "Something went wrong.")
         }
       }
     } catch {

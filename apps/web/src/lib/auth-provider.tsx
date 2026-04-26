@@ -1,10 +1,10 @@
 import { createContext, useContext } from "react"
 import { authClient } from "./auth-client"
 
-interface AuthContextValue {
-  session: ReturnType<typeof authClient.useSession>["data"]
+type AuthContextValue = {
   isPending: boolean
-  user: ReturnType<typeof authClient.useSession>["data"]["user"] | null
+  session: typeof authClient.$Infer.Session | null
+  user: typeof authClient.$Infer.Session.user | null
   signOut: () => Promise<void>
 }
 

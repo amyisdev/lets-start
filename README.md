@@ -10,6 +10,8 @@ A living starter kit for full-stack projects with Bun, Hono, React, and shadcn/u
 | Server | Bun + Hono + Drizzle ORM + SQLite |
 | Client | Vite + React 19 + Tailwind CSS v4 |
 | UI | shadcn/ui (base-ui, mira style) |
+| Data fetching | @tanstack/react-query |
+| Notifications | sonner (toast) |
 | Auth | better-auth (email/password) |
 | Tooling | Biome + TypeScript |
 
@@ -48,7 +50,7 @@ To customize the client origin or API URL, see the environment variables in `.en
 │   ├── server/     # Hono REST API with Drizzle + SQLite + better-auth
 │   │   ├── scripts/    # serve.ts, migrate.ts, seed.ts
 │   │   └── src/        # routes/, middleware/, db/schemas/, lib/
-│   └── web/        # Vite React app with auth forms
+│   └── web/        # Vite React app with auth forms, react-query, sonner
 ├── packages/
 │   ├── shared/     # Zod schemas and shared types
 │   └── ui/         # shadcn/ui component library

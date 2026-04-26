@@ -11,7 +11,6 @@
   },
   "exports": {
     "./schemas/todo": "./src/schemas/todo.ts",
-    "./schemas/api": "./src/schemas/api.ts",
-    "./constants": "./src/constants.ts"
+    "./schemas/api": "./src/schemas/api.ts"
   }
 }
