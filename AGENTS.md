@@ -78,10 +78,10 @@ Components are installed into `packages/ui/src/components/` automatically.
 
 | Var | Default | Purpose |
 |-----|---------|---------|
-| `PORT` | `3001` | Hono server port |
+| `PORT` | `3000` | Hono server port |
 | `DATABASE_URL` | `./data.db` | SQLite database file (relative to server cwd) |
 | `BETTER_AUTH_SECRET` | (required) | Secret key for better-auth sessions |
-| `BETTER_AUTH_URL` | `http://localhost:3001` | Base URL for better-auth |
+| `BETTER_AUTH_URL` | `http://localhost:3000` | Base URL for better-auth |
 | `CLIENT_ORIGIN` | `http://localhost:5173` | Allowed CORS origin |
 
 Validated at startup by `@t3-oss/env-core` in `src/lib/config.ts`. Missing `BETTER_AUTH_SECRET` causes immediate exit.
@@ -143,4 +143,4 @@ This sets `c.set("user", ...)` and `c.set("session", ...)` and throws 401 if una
 
 ## Vite Dev Proxy
 
-`apps/web/vite.config.ts` proxies `/api/*` to `http://localhost:3001` during dev.
+`apps/web/vite.config.ts` proxies `/api/*` to `http://localhost:3000` during dev.

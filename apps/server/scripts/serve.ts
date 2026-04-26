@@ -1,7 +1,7 @@
 import { app } from "../src/index.ts"
 import { logger } from "../src/lib/logger.ts"
 
-const port = Number(process.env.PORT) || 3001
+const port = Number(process.env.PORT) || 3000
 
 const server = Bun.serve({
   fetch: app.fetch,
