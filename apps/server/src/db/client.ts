@@ -1,8 +1,8 @@
 import { Database } from "bun:sqlite"
 import { drizzle } from "drizzle-orm/bun-sqlite"
-import * as schema from "./schema.ts"
+import { env } from "../lib/config.ts"
+import * as schema from "./schemas/index.ts"
 
-const databaseUrl = process.env.DATABASE_URL || "./data.db"
-const sqlite = new Database(databaseUrl)
+const sqlite = new Database(env.DATABASE_URL)
 
 export const db = drizzle(sqlite, { schema })

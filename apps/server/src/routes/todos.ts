@@ -7,9 +7,20 @@ import { eq } from "drizzle-orm"
 import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { db } from "../db/client.ts"
-import { todos } from "../db/schema.ts"
+import { todos } from "../db/schemas/todos.ts"
+import { needAuth } from "../middleware/auth.ts"
 
 const app = new Hono()
+
+app.use("*", needAuth)
+
+async function getTodoOrThrow(id: number) {
+  const todo = await db.select().from(todos).where(eq(todos.id, id)).limit(1)
+  if (todo.length === 0) {
+    throw new HTTPException(404, { message: "Todo not found" })
+  }
+  return todo[0]
+}
 
 app.get("/", async (c) => {
   const allTodos = await db.select().from(todos).orderBy(todos.createdAt)
@@ -38,22 +49,11 @@ app.patch("/:id", zValidator("json", UpdateTodoSchema), async (c) => {
     throw new HTTPException(400, { message: "Invalid id" })
   }
 
-  const existing = await db
-    .select()
-    .from(todos)
-    .where(eq(todos.id, id))
-    .limit(1)
-
-  if (existing.length === 0) {
-    throw new HTTPException(404, { message: "Todo not found" })
-  }
+  await getTodoOrThrow(id)
 
   const result = await db
     .update(todos)
-    .set({
-      ...input,
-      updatedAt: new Date(),
-    })
+    .set(input)
     .where(eq(todos.id, id))
     .returning()
 
@@ -67,15 +67,7 @@ app.delete("/:id", async (c) => {
     throw new HTTPException(400, { message: "Invalid id" })
   }
 
-  const existing = await db
-    .select()
-    .from(todos)
-    .where(eq(todos.id, id))
-    .limit(1)
-
-  if (existing.length === 0) {
-    throw new HTTPException(404, { message: "Todo not found" })
-  }
+  await getTodoOrThrow(id)
 
   await db.delete(todos).where(eq(todos.id, id))
 

@@ -1,5 +1,5 @@
-import { db } from "./client.ts"
-import { todos } from "./schema.ts"
+import { db } from "../src/db/client.ts"
+import { todos } from "../src/db/schemas/todos.ts"
 
 async function seed() {
   console.log("Seeding database...")

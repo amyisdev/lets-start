@@ -46,6 +46,8 @@ To customize the client origin or API URL, see the environment variables in `.en
 ```
 ├── apps/
 │   ├── server/     # Hono REST API with Drizzle + SQLite + better-auth
+│   │   ├── scripts/    # serve.ts, migrate.ts, seed.ts
+│   │   └── src/        # routes/, middleware/, db/schemas/, lib/
 │   └── web/        # Vite React app with auth forms
 ├── packages/
 │   ├── shared/     # Zod schemas and shared types

@@ -32,7 +32,8 @@ Run from repo root only. No per-package lint/format scripts.
   - `apps/server` and `apps/web`: `allowImportingTsExtensions: true` → CAN use `.ts` in imports
   - `packages/shared`: NO `allowImportingTsExtensions` → MUST NOT use `.ts` in imports (typecheck will fail)
 - **Drizzle config must NOT include `driver: "bun-sqlite"`** — it breaks `drizzle-kit generate`. Omit the field entirely.
-- **Server runs directly via Bun** (`Bun.serve()` in `src/index.ts`). The `build` script is only `tsc --noEmit` for type checking — no compiled output.
+- **Server runs via `scripts/serve.ts`** (`Bun.serve()`). `src/index.ts` only exports the Hono app. The `build` script is only `tsc --noEmit` for type checking — no compiled output.
+- **Env validation via `@t3-oss/env-core`** — `src/lib/config.ts` validates all server env vars at startup. Missing `BETTER_AUTH_SECRET` causes immediate exit.
 - **Bun auto-loads `.env` from repo root** — no `dotenv` package needed. Copy `.env.example` to `.env` at root.
 - **Biome CSS linting is disabled** — Tailwind v4 syntax (`@theme inline`, `@custom-variant`) isn't supported by Biome's CSS parser. Only formatting is enabled.
 - **`drizzle/` directory is excluded from Biome** — generated migration files shouldn't be linted/formatted.
@@ -56,10 +57,11 @@ import { db } from "@/db/client"
 ## Adding a Feature
 
 1. Add Zod schemas to `packages/shared/src/schemas/<feature>.ts` (no `.ts` extensions in imports)
-2. Add DB schema to `apps/server/src/db/schema.ts` if needed
+2. Add DB schema to `apps/server/src/db/schemas/<feature>.ts` if needed, export from `schemas/index.ts`
 3. Create route at `apps/server/src/routes/<feature>.ts`, mount in `src/index.ts`
-4. Add API client methods to `apps/web/src/api/client.ts`
-5. Build UI in `apps/web/src/components/`
+4. If the route requires authentication, use `app.use("*", needAuth)` inside the route file
+5. Add API client methods to `apps/web/src/api/client.ts`
+6. Build UI in `apps/web/src/components/`
 
 ## Adding a shadcn Component
 
@@ -75,6 +77,46 @@ Components are installed into `packages/ui/src/components/` automatically.
 |-----|---------|---------|
 | `PORT` | `3001` | Hono server port |
 | `DATABASE_URL` | `./data.db` | SQLite database file (relative to server cwd) |
+| `BETTER_AUTH_SECRET` | (required) | Secret key for better-auth sessions |
+| `BETTER_AUTH_URL` | `http://localhost:3001` | Base URL for better-auth |
+| `CLIENT_ORIGIN` | `http://localhost:5173` | Allowed CORS origin |
+
+Validated at startup by `@t3-oss/env-core` in `src/lib/config.ts`. Missing `BETTER_AUTH_SECRET` causes immediate exit.
+
+## Server Architecture
+
+```
+apps/server/
+├── scripts/
+│   ├── serve.ts        ← Bun.serve() + graceful shutdown
+│   ├── migrate.ts      ← drizzle migration runner
+│   └── seed.ts         ← database seeder
+├── src/
+│   ├── index.ts        ← Hono app setup (exports app only)
+│   ├── auth.ts         ← better-auth config
+│   ├── db/
+│   │   ├── client.ts   ← drizzle + SQLite connection
+│   │   └── schemas/    ← feature-specific Drizzle schemas
+│   ├── lib/
+│   │   ├── config.ts   ← @t3-oss/env-core validation
+│   │   └── logger.ts   ← pino structured logger
+│   ├── middleware/
+│   │   ├── auth.ts     ← needAuth (returns 401 if unauthenticated)
+│   │   └── error.ts    ← global error handler
+│   └── routes/         ← Hono route handlers
+```
+
+## Auth Middleware
+
+Routes requiring authentication should use `needAuth` from `src/middleware/auth.ts`:
+
+```ts
+import { needAuth } from "../middleware/auth.ts"
+
+app.use("*", needAuth)
+```
+
+This sets `c.set("user", ...)` and `c.set("session", ...)` and throws 401 if unauthenticated.
 
 ## Vite Dev Proxy
 

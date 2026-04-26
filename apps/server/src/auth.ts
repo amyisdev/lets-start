@@ -1,8 +1,7 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter"
 import { betterAuth } from "better-auth"
-import { db } from "./db/client"
-
-const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173"
+import { db } from "./db/client.ts"
+import { env } from "./lib/config.ts"
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -11,6 +10,6 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3001",
-  trustedOrigins: [clientOrigin],
+  baseURL: env.BETTER_AUTH_URL,
+  trustedOrigins: [env.CLIENT_ORIGIN],
 })
