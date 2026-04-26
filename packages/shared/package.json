@@ -1,0 +1,17 @@
+{
+  "name": "@workspace/shared",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "exports": {
+    "./schemas/todo": "./src/schemas/todo.ts",
+    "./schemas/api": "./src/schemas/api.ts",
+    "./constants": "./src/constants.ts"
+  }
+}

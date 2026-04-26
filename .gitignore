@@ -28,3 +28,8 @@ npm-debug.log*
 # Misc
 .DS_Store
 *.pem
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
