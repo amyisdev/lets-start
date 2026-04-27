@@ -2,6 +2,33 @@
 
 A living starter kit for full-stack projects with Bun, Hono, React, and shadcn/ui.
 
+## Creating a New Project
+
+Use this repo as a [GitHub template](https://github.com/amyisdev/lets-start) — click **"Use this template"** to create a new repository, then:
+
+```bash
+git clone git@github.com:<your-org>/<your-project>.git
+cd <your-project>
+
+# Rename everything from "lets-start" to your project name
+bun run rename <your-project>
+
+# Clean up the rename script
+rm scripts/rename.ts
+
+# Set up environment
+cp .env.example .env
+echo "BETTER_AUTH_SECRET=$(openssl rand -base64 32)" >> .env
+bun install
+bun run --cwd apps/server db:migrate
+bun run --cwd apps/server db:seed
+
+# Start fresh git history (optional)
+rm -rf .git && git init && git add . && git commit -m "init"
+
+bun run dev
+```
+
 ## Stack
 
 | Layer | Tech |

@@ -7,7 +7,8 @@
     "dev": "turbo dev",
     "lint": "biome check",
     "format": "biome format --write",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "rename": "bun run scripts/rename.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.13",
