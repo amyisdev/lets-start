@@ -3,75 +3,92 @@ import {
   CreateTodoSchema,
   UpdateTodoSchema,
 } from "@workspace/shared/schemas/todo"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { db } from "../db/client.ts"
 import { todos } from "../db/schemas/todos.ts"
 import { needAuth } from "../middleware/auth.ts"
 
-const app = new Hono()
+async function getUserTodoOrThrow(id: number, userId: string) {
+  const todo = await db
+    .select()
+    .from(todos)
+    .where(and(eq(todos.id, id), eq(todos.userId, userId)))
+    .limit(1)
 
-app.use("*", needAuth)
-
-async function getTodoOrThrow(id: number) {
-  const todo = await db.select().from(todos).where(eq(todos.id, id)).limit(1)
   if (todo.length === 0) {
     throw new HTTPException(404, { message: "Todo not found" })
   }
+
   return todo[0]
 }
 
-app.get("/", async (c) => {
-  const allTodos = await db.select().from(todos).orderBy(todos.createdAt)
-  return c.json({ success: true, data: allTodos })
-})
+const todoRoutes = new Hono()
+  .use("*", needAuth)
 
-app.post("/", zValidator("json", CreateTodoSchema), async (c) => {
-  const input = c.req.valid("json")
+  .get("/", async (c) => {
+    const user = c.get("user")
+    const allTodos = await db
+      .select()
+      .from(todos)
+      .where(eq(todos.userId, user.id))
+      .orderBy(todos.createdAt)
 
-  const result = await db
-    .insert(todos)
-    .values({
-      title: input.title,
-      completed: false,
-    })
-    .returning()
+    return c.json({ success: true, data: allTodos })
+  })
 
-  return c.json({ success: true, data: result[0] }, 201)
-})
+  .post("/", zValidator("json", CreateTodoSchema), async (c) => {
+    const user = c.get("user")
+    const input = c.req.valid("json")
 
-app.patch("/:id", zValidator("json", UpdateTodoSchema), async (c) => {
-  const id = Number(c.req.param("id"))
-  const input = c.req.valid("json")
+    const result = await db
+      .insert(todos)
+      .values({
+        userId: user.id,
+        title: input.title,
+        completed: false,
+      })
+      .returning()
 
-  if (Number.isNaN(id)) {
-    throw new HTTPException(400, { message: "Invalid id" })
-  }
+    return c.json({ success: true, data: result[0] }, 201)
+  })
 
-  await getTodoOrThrow(id)
+  .patch("/:id", zValidator("json", UpdateTodoSchema), async (c) => {
+    const user = c.get("user")
+    const id = Number(c.req.param("id"))
+    const input = c.req.valid("json")
 
-  const result = await db
-    .update(todos)
-    .set(input)
-    .where(eq(todos.id, id))
-    .returning()
+    if (Number.isNaN(id)) {
+      throw new HTTPException(400, { message: "Invalid id" })
+    }
 
-  return c.json({ success: true, data: result[0] })
-})
+    await getUserTodoOrThrow(id, user.id)
 
-app.delete("/:id", async (c) => {
-  const id = Number(c.req.param("id"))
+    const result = await db
+      .update(todos)
+      .set(input)
+      .where(and(eq(todos.id, id), eq(todos.userId, user.id)))
+      .returning()
 
-  if (Number.isNaN(id)) {
-    throw new HTTPException(400, { message: "Invalid id" })
-  }
+    return c.json({ success: true, data: result[0] })
+  })
 
-  await getTodoOrThrow(id)
+  .delete("/:id", async (c) => {
+    const user = c.get("user")
+    const id = Number(c.req.param("id"))
 
-  await db.delete(todos).where(eq(todos.id, id))
+    if (Number.isNaN(id)) {
+      throw new HTTPException(400, { message: "Invalid id" })
+    }
 
-  return c.json({ success: true, data: null })
-})
+    await getUserTodoOrThrow(id, user.id)
 
-export default app
+    await db
+      .delete(todos)
+      .where(and(eq(todos.id, id), eq(todos.userId, user.id)))
+
+    return c.json({ success: true, data: null })
+  })
+
+export default todoRoutes

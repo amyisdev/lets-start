@@ -2,13 +2,13 @@ import { relations } from "drizzle-orm"
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
 import { user } from "./auth.ts"
 
-export const todos = sqliteTable("todos", {
-  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+export const userProfiles = sqliteTable("user_profile", {
   userId: text("user_id")
-    .notNull()
+    .primaryKey()
     .references(() => user.id, { onDelete: "cascade" }),
-  title: text("title").notNull(),
-  completed: integer("completed", { mode: "boolean" }).notNull().default(false),
+  displayName: text("display_name"),
+  bio: text("bio", { length: 160 }),
+  avatarUrl: text("avatar_url"),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date()),
@@ -17,6 +17,6 @@ export const todos = sqliteTable("todos", {
     .$onUpdate(() => new Date()),
 })
 
-export const todosRelations = relations(todos, ({ one }) => ({
-  user: one(user, { fields: [todos.userId], references: [user.id] }),
+export const userProfileRelations = relations(userProfiles, ({ one }) => ({
+  user: one(user, { fields: [userProfiles.userId], references: [user.id] }),
 }))

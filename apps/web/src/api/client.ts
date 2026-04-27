@@ -1,4 +1,8 @@
 import type {
+  UpdateProfileInput,
+  UserProfile,
+} from "@workspace/shared/schemas/profile"
+import type {
   CreateTodoInput,
   Todo,
   UpdateTodoInput,
@@ -25,6 +29,16 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  profile: {
+    get: (signal?: AbortSignal) =>
+      fetchJson<UserProfile | null>("/profile", { signal }),
+    update: (input: UpdateProfileInput, signal?: AbortSignal) =>
+      fetchJson<UserProfile>("/profile", {
+        method: "PATCH",
+        body: JSON.stringify(input),
+        signal,
+      }),
+  },
   todos: {
     list: (signal?: AbortSignal) => fetchJson<Todo[]>("/todos", { signal }),
     create: (input: CreateTodoInput, signal?: AbortSignal) =>

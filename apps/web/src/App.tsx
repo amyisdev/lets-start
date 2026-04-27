@@ -3,6 +3,7 @@ import { AuthGuard } from "@/components/auth-guard"
 import { AuthProvider } from "@/lib/auth-provider"
 import { LoginPage } from "@/pages/login"
 import { NotFoundPage } from "@/pages/not-found"
+import { ProfilePage } from "@/pages/profile"
 import { TodosPage } from "@/pages/todos"
 
 export function App() {
@@ -16,6 +17,14 @@ export function App() {
             element={
               <AuthGuard>
                 <TodosPage />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <AuthGuard>
+                <ProfilePage />
               </AuthGuard>
             }
           />

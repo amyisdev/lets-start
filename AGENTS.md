@@ -56,6 +56,8 @@ import { db } from "@/db/client"
 
 ## Adding a Feature
 
+See `@docs/feature-development-guidelines.md` for the full pattern reference with examples.
+
 1. Add Zod schemas to `packages/shared/src/schemas/<feature>.ts` (no `.ts` extensions in imports)
 2. Add DB schema to `apps/server/src/db/schemas/<feature>.ts` if needed, export from `schemas/index.ts`
 3. Create route at `apps/server/src/routes/<feature>.ts`, mount in `src/index.ts`

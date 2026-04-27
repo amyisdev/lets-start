@@ -10,12 +10,10 @@ async function seed() {
     return
   }
 
-  await db.insert(todos).values([
-    { title: "Build the starter kit", completed: true },
-    { title: "Add Hono server", completed: false },
-    { title: "Wire up the frontend", completed: false },
-  ])
-
+  // Todos now require a userId (FK to user table).
+  // Since we can't create a valid better-auth user from a seed script easily,
+  // users should register and create their own todos via the app.
+  console.log("Skipping todo seeding — todos require an authenticated user.")
   console.log("Seeding complete.")
 }
 

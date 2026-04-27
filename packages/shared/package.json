@@ -11,6 +11,7 @@
   },
   "exports": {
     "./schemas/todo": "./src/schemas/todo.ts",
+    "./schemas/profile": "./src/schemas/profile.ts",
     "./schemas/api": "./src/schemas/api.ts"
   }
 }

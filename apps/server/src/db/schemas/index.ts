@@ -7,4 +7,5 @@ export {
   userRelations,
   verification,
 } from "./auth.ts"
-export { todos } from "./todos.ts"
+export { userProfileRelations, userProfiles } from "./profile.ts"
+export { todos, todosRelations } from "./todos.ts"

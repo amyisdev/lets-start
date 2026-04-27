@@ -6,6 +6,7 @@ import type {
 } from "@workspace/shared/schemas/todo"
 import { Button } from "@workspace/ui/components/button"
 import { useState } from "react"
+import { Link } from "react-router"
 import { toast } from "sonner"
 import { api } from "@/api/client"
 import { useAuth } from "@/lib/auth-provider"
@@ -78,9 +79,12 @@ export function TodosPage() {
     <div className="relative min-h-svh">
       <header className="absolute right-4 top-4">
         <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">
+          <Link
+            to="/profile"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
             {user?.name ?? user?.email}
-          </span>
+          </Link>
           <Button variant="outline" size="sm" onClick={() => signOut()}>
             Sign out
           </Button>
