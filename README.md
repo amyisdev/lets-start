@@ -56,6 +56,10 @@ To customize the client origin or API URL, see the environment variables in `.en
 │   └── ui/         # shadcn/ui component library
 ```
 
+## Feature Development
+
+See `docs/feature-development-guidelines.md` for the conventions and patterns used when adding new features — covering shared schemas, database schema, server routes, API client methods, React Query hooks, and type-safe Hono context.
+
 ## Available Scripts
 
 | Script | Description |
