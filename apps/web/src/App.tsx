@@ -1,44 +1,28 @@
-import { Button } from "@workspace/ui/components/button"
-import { AuthForms } from "@/components/auth-forms"
-import { Todos } from "@/components/todos"
-import { AuthProvider, useAuth } from "@/lib/auth-provider"
-
-function AppContent() {
-  const { user, isPending, signOut } = useAuth()
-
-  if (isPending) {
-    return (
-      <div className="flex min-h-svh items-center justify-center">
-        <p className="text-muted-foreground text-sm">Loading...</p>
-      </div>
-    )
-  }
-
-  if (!user) {
-    return <AuthForms />
-  }
-
-  return (
-    <div className="relative min-h-svh">
-      <header className="absolute right-4 top-4">
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">
-            {user.name ?? user.email}
-          </span>
-          <Button variant="outline" size="sm" onClick={() => signOut()}>
-            Sign out
-          </Button>
-        </div>
-      </header>
-      <Todos />
-    </div>
-  )
-}
+import { BrowserRouter, Navigate, Route, Routes } from "react-router"
+import { AuthGuard } from "@/components/auth-guard"
+import { AuthProvider } from "@/lib/auth-provider"
+import { LoginPage } from "@/pages/login"
+import { NotFoundPage } from "@/pages/not-found"
+import { TodosPage } from "@/pages/todos"
 
 export function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/todos"
+            element={
+              <AuthGuard>
+                <TodosPage />
+              </AuthGuard>
+            }
+          />
+          <Route path="/" element={<Navigate to="/todos" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }

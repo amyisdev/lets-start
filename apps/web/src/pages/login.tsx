@@ -1,14 +1,29 @@
 import { Button } from "@workspace/ui/components/button"
 import { useState } from "react"
+import { Navigate } from "react-router"
 import { authClient } from "@/lib/auth-client"
+import { useAuth } from "@/lib/auth-provider"
 
-export function AuthForms() {
+export function LoginPage() {
+  const { user, isPending } = useAuth()
   const [mode, setMode] = useState<"login" | "register">("login")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  if (isPending) {
+    return (
+      <div className="flex min-h-svh items-center justify-center">
+        <p className="text-muted-foreground text-sm">Loading...</p>
+      </div>
+    )
+  }
+
+  if (user) {
+    return <Navigate to="/todos" replace />
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
